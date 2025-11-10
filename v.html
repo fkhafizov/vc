@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gallery - v_ver001</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .thumbnail {
+            transform: scale(1.05);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-overlay:before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 4px;
+        }
+
+        .card:hover .play-overlay {
+            background: rgba(255,255,255,0.9);
+        }
+
+        .card:hover .play-overlay:before {
+            border-left-color: #333;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .folder-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Video Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close:hover {
+            color: #ccc;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+            
+            .thumbnail-container {
+                height: 180px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .thumbnail-container {
+                height: 160px;
+            }
+            
+            .play-overlay {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .play-overlay:before {
+                border-left-width: 16px;
+                border-top-width: 10px;
+                border-bottom-width: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Gallery</h1>
+        <div class="grid">
+            <div class="card" onclick="openVideo('v001/i_r.mp4')">
+                <div class="thumbnail-container">
+                    <img src="v001/i_r.jpeg" alt="v001 thumbnail" class="thumbnail">
+                    <div class="play-overlay"></div>
+                </div>
+                <div class="content">
+                    <div class="folder-name">v001</div>
+                    <div class="description">студенты химфака отдыхают: играют в шахматы и танцуют (1981-1986)</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="openVideo('v002/i_r.mp4')">
+                <div class="thumbnail-container">
+                    <img src="v002/i_r.jpeg" alt="v002 thumbnail" class="thumbnail">
+                    <div class="play-overlay"></div>
+                </div>
+                <div class="content">
+                    <div class="folder-name">v002</div>
+                    <div class="description">студенты химфака отдыхают: играют в шахматы и танцуют (1981-1986)</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="openVideo('v003/i_r.mp4')">
+                <div class="thumbnail-container">
+                    <img src="v003/i_r.jpeg" alt="v003 thumbnail" class="thumbnail">
+                    <div class="play-overlay"></div>
+                </div>
+                <div class="content">
+                    <div class="folder-name">v003</div>
+                    <div class="description">студенты химфака отдыхают: играют в шахматы и танцуют (1981-1986)</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="openVideo('v004/i_r.mp4')">
+                <div class="thumbnail-container">
+                    <img src="v004/i_r.jpeg" alt="v004 thumbnail" class="thumbnail">
+                    <div class="play-overlay"></div>
+                </div>
+                <div class="content">
+                    <div class="folder-name">v004</div>
+                    <div class="description">студенты химфака отдыхают: играют в шахматы и танцуют (1981-1986)</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="openVideo('v005/i_r.mp4')">
+                <div class="thumbnail-container">
+                    <img src="v005/i_r.jpeg" alt="v005 thumbnail" class="thumbnail">
+                    <div class="play-overlay"></div>
+                </div>
+                <div class="content">
+                    <div class="folder-name">v005</div>
+                    <div class="description">студенты химфака отдыхают: играют в шахматы и танцуют (1981-1986)</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVideo()">&times;</span>
+            <video id="modalVideo" controls>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function openVideo(videoPath) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            video.src = videoPath;
+            modal.style.display = 'block';
+            video.play();
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            modal.style.display = 'none';
+            video.pause();
+            video.currentTime = 0;
+        }
+
+        // Close modal when clicking outside the video
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeVideo();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>
